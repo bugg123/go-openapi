@@ -1,0 +1,65 @@
+swagger: "2.0"
+
+info:
+  title: Stuff to do
+  version: 1.0.0
+
+basePath: /v1
+schemes:
+    - http
+consumes:
+    - application/json
+produces:
+    - application/json
+
+paths:
+  /players:
+    get:
+      summary: Get all players
+      responses:
+        "200":
+          description: Array of players
+          schema:
+            $ref: '#/definitions/Players'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: Create a player
+      responses:
+        "201":
+          description: Null response
+        default:
+          description: unexpexted error
+          schema:
+            $ref: '#/definitions/Error'
+definitions:
+  Players:
+    type: array
+    items:
+      $ref: '#/definitions/Player'
+  Player:
+    type: "object"
+    required:
+      - id
+      - name
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      tag:
+        type: string
+  Error:
+    type: "object"
+    required:
+    - code
+    - message
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
