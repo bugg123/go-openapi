@@ -1,65 +1,69 @@
-swagger: "2.0"
-
+openapi: 3.0.1
 info:
   title: Stuff to do
   version: 1.0.0
-
-basePath: /v1
-schemes:
-    - http
-consumes:
-    - application/json
-produces:
-    - application/json
-
+servers:
+- url: /v1
 paths:
   /players:
     get:
-      summary: Get all players
       responses:
         "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Players'
           description: Array of players
-          schema:
-            $ref: '#/definitions/Players'
         default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
           description: unexpected error
-          schema:
-            $ref: '#/definitions/Error'
+      summary: Get all players
     post:
-      summary: Create a player
       responses:
         "201":
+          content: {}
           description: Null response
         default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
           description: unexpexted error
-          schema:
-            $ref: '#/definitions/Error'
-definitions:
-  Players:
-    type: array
-    items:
-      $ref: '#/definitions/Player'
-  Player:
-    type: "object"
-    required:
+      summary: Create a player
+components:
+  schemas:
+    Players:
+      items:
+        $ref: '#/components/schemas/Player'
+      type: array
+    Player:
+      example:
+        name: name
+        id: 0
+        tag: tag
+      properties:
+        id:
+          format: int64
+          type: integer
+        name:
+          type: string
+        tag:
+          type: string
+      required:
       - id
       - name
-    properties:
-      id:
-        type: integer
-        format: int64
-      name:
-        type: string
-      tag:
-        type: string
-  Error:
-    type: "object"
-    required:
-    - code
-    - message
-    properties:
-      code:
-        type: integer
-        format: int32
-      message:
-        type: string
+      type: object
+    Error:
+      properties:
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+      required:
+      - code
+      - message
+      type: object
